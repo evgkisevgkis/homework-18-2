@@ -10,7 +10,17 @@ movies_schema = MovieSchema()
 @movie_ns.route('/')
 class MoviesView(Resource):
     def get(self):
-        movies = Movie.query.all()
+        movies = Movie.query
+        year = request.args.get('year')
+        director_id = request.args.get('director_id')
+        genre_id = request.args.get('genre_id')
+        if year:
+            movies = movies.filter(Movie.year == year)
+        if director_id:
+            movies = movies.filter(Movie.director_id == director_id)
+        if genre_id:
+            movies = movies.filter(Movie.genre_id == genre_id)
+        movies = movies.all()
         return movies_schema.dump(movies, many=True), 200
 
     def post(self):
