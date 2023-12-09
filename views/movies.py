@@ -1,5 +1,7 @@
+from flask import request
 from flask_restx import Resource, Namespace
 from models import Movie, MovieSchema
+from setup_db import db
 
 movie_ns = Namespace('movies')
 movies_schema = MovieSchema()
@@ -12,7 +14,11 @@ class MoviesView(Resource):
         return movies_schema.dump(movies, many=True), 200
 
     def post(self):
-        return 'post', 201
+        data = request.json
+        new_movie = Movie(**data)
+        db.session.add(new_movie)
+        db.session.commit()
+        return 'Фильм добавлен в базу', 201
 
 
 @movie_ns.route('/<int:mid>')
