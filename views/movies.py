@@ -40,7 +40,14 @@ class MovieView(Resource):
         movie.rating = new_data.get('rating')
         movie.genre_id = new_data.get('genre_id')
         movie.director_id = new_data.get('director_id')
+        db.session.add(movie)
+        db.session.commit()
         return 'Фильм успешно обновлен', 200
 
     def delete(self, mid: int):
+        movie = Movie.query.get(mid)
+        if not movie:
+            return 'Извините, такого фильма нету', 204
+        db.session.delete(movie)
+        db.session.commit()
         return 'delete', 200
