@@ -50,4 +50,4 @@ class MovieView(Resource):
             return 'Извините, такого фильма нету', 204
         db.session.delete(movie)
         db.session.commit()
-        return 'delete', 200
+        return 'Фильм удален', 200
