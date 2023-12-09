@@ -1,12 +1,15 @@
 from flask_restx import Resource, Namespace
+from models import Movie, MovieSchema
 
 movie_ns = Namespace('movies')
+movies_schema = MovieSchema()
 
 
 @movie_ns.route('/')
 class MoviesView(Resource):
     def get(self):
-        return 'get', 200
+        movies = Movie.query.all()
+        return movies_schema.dump(movies, many=True), 200
 
     def post(self):
         return 'post', 201
